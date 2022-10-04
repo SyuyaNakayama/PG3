@@ -15,11 +15,9 @@ int Wage(unsigned int workTime)
 
 int main()
 {
-	for (size_t i = 1; i <= 10; i++)
-	{
-		printf("ˆê”Ê’À‹à:1072‰~@");
-		printf("Ä‹A’À‹à:%5d‰~\n",Wage(i));
-	}
+	int n = 5;
+
+	printf("%d", Wage(n));
 
 	return 0;
 }
