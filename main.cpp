@@ -1,41 +1,77 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <windows.h>
-#include <functional>
+#include <list>
+#include <string.h>
+
+using namespace std;
 
 int main()
 {
-	srand(time(NULL));
-
-	const bool JUDGE_TABLE[2][2] =
+	const char STATION_NAME[28][17] =
 	{
-		{false,true},{true,false}
+		"Tokyo",
+		"Kanda",
+		"Akihabara",
+		"Okachimachi",
+		"Ueno",
+		"Uguisudani",
+		"Nippori",
+		"Tabata",
+		"Komagome",
+		"Sugamo",
+		"Otsuka",
+		"Ikebukuro",
+		"Mejiro",
+		"Takadanobaba",
+		"Shin-Okubo",
+		"Shinjuku",
+		"Yoyogi",
+		"Harajuku",
+		"Shibuya",
+		"Ebisu",
+		"Meguro",
+		"Gotanda",
+		"Osaki",
+		"Shinagawa",
+		"Tamachi",
+		"Hamamatsucho",
+		"Shimbashi",
+		"Yurakucho"
 	};
 
-	int select;
-	// 予想
-	while (1)
+	list<char*> yamanote1970, yamanote2019, yamanote2022;
+	list<char*>::iterator it;
+
+	for (const char* str : STATION_NAME)
 	{
-		printf("出目を予想して下さい。\n");
-		printf("1:奇数(半)\n2:偶数(丁)\n");
-		scanf_s("%d", &select);
-		if (select == 1 || select == 2) { break; }
-		else { printf("正しい数を入力して下さい。\n\n"); }
+		yamanote1970.push_back((char*)str);
 	}
 
-	std::function<int(int)> dice = [](int waitTime)
+	yamanote2019 = yamanote1970;
+	for (it = yamanote2019.begin(); it != yamanote2019.end(); it++)
 	{
-		printf("判定中です、ちょっと待ってね >o<\n");
-		Sleep(waitTime * 1000);
-		int num = rand() % 6 + 1;
-		printf("出目:%d\n", num);
-		return num;
-	};
-	
-	// 判定
-	if (JUDGE_TABLE[select - 1][dice(3) % 2]) { printf("大当たり！！\n"); }
-	else { printf("残念無念再来年...\n"); }
+		if (*it == STATION_NAME[7])
+		{
+			yamanote2019.insert(it, (char*)"Nishi-Nippori");
+		}
+	}
+
+	yamanote2022 = yamanote2019;
+	for (it = yamanote2022.begin(); it != yamanote2022.end(); it++)
+	{
+		if (*it == STATION_NAME[24])
+		{
+			yamanote2022.insert(it, (char*)"Takanawa-Gateway");
+		}
+	}
+
+	printf("1970年の駅\n");
+	for (char* str : yamanote1970) { printf("%s,", str); }
+
+	printf("\n\n2019年の駅\n");
+	for (char* str : yamanote2019) { printf("%s,", str); }
+
+	printf("\n\n2022年の駅\n");
+	for (char* str : yamanote2022) { printf("%s,", str); }
 
 	return 0;
 }
