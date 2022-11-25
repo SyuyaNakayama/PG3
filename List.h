@@ -1,5 +1,4 @@
 #pragma once
-#include <memory>
 
 template<class T> class List
 {
@@ -26,21 +25,52 @@ public:
 		T GetSource() { return itr->source; }
 		void operator++(T) { itr = itr->next; }
 		void operator--(T) { itr = itr->prev; }
+		Iterator& operator+(size_t incrementDis)
+		{
+			for (size_t i = 0; i < incrementDis; i++) { itr = itr->next; }
+			return *this;
+		}
+		Iterator& operator-(size_t decrementDis)
+		{
+			for (size_t i = 0; i < decrementDis; i++) { itr = itr->prev; }
+			return *this;
+		}
 		T operator*() { return itr->source; }
 	};
 
 	List(const int ARRAY_SIZE) { Create(ARRAY_SIZE); }
-	~List() { delete list; list = nullptr; }
+	~List()
+	{
+		delete list; list = nullptr;
+	}
 	Iterator Begin()
 	{
-		ListStruct* lst = list;
-		size_t i;
-		for (i = 0; lst != nullptr; i++) { lst = list[i].prev; }
-		Iterator itr{};
-		itr.Set(&list[i - 1]);
-		return itr;
+		for (size_t i = 0; i < size; i++)
+		{
+			if (list[i].prev != nullptr) { continue; }
+			Iterator itr{};
+			itr.Set(&list[i]);
+			return itr;
+		}
+	}
+	Iterator End()
+	{
+		for (size_t i = 0; i < size; i++)
+		{
+			if (list[i].next != nullptr) { continue; }
+			Iterator itr{};
+			itr.Set(&list[i]);
+			return itr;
+		}
 	}
 	void Add(T source, size_t addPlace = -1);
+	void Delete(size_t delPlace = -1);
+	T operator[](size_t index)
+	{
+		Iterator itr = Begin();
+		itr + index;
+		return *itr;
+	}
 };
 
 template<class T> void List<T>::Create(const int ARRAY_NUM)
@@ -60,27 +90,49 @@ template<class T> void List<T>::Create(const int ARRAY_NUM)
 template<class T> void List<T>::Add(T source, size_t addPlace)
 {
 	list[size++] = source;
-	if (addPlace == -1 || size <= addPlace)
+	Iterator itr{};
+	if (size == 1) { return; }
+	// ÅŒã‚É’Ç‰Á
+	if (size - 1 <= addPlace)
 	{
-		if (size == 1) { return; }
+		itr = End();
+		itr.Get()->next = &list[size - 1];
+		list[size - 1].prev = itr.Get();
+		return;
+	}
+	// Å‰‚É’Ç‰Á
+	if (addPlace == 0)
+	{
+		itr = Begin();
+		list[size - 1].next = itr.Get();
+		itr.Get()->prev = &list[size - 1];
+		return;
+	}
+	// “r’†‚É’Ç‰Á
+	itr = Begin() + addPlace - 1;
+	Iterator itr2 = Begin() + addPlace;
+	itr.Get()->next = &list[size - 1];
+	list[size - 1].prev = itr.Get();
+	itr2.Get()->prev = &list[size - 1];
+	list[size - 1].next = itr2.Get();
+}
 
-		list[size - 2].next = &list[size - 1];
-		list[size - 1].prev = &list[size - 2];
-		list[size - 1].next = nullptr;
-		return;
-	}
-	if (addPlace != 0)
+template<class T> void List<T>::Delete(size_t delPlace)
+{
+	Iterator itr{};
+	if (size == 0) { return; }
+
+	// ÅŒã‚ğíœ
+	if (size <= delPlace)
 	{
-		list[addPlace - 1].next = &list[size - 1];
-		list[addPlace].prev = &list[size - 1];
-		list[size - 1].prev = &list[addPlace - 1];
-		list[size - 1].next = &list[addPlace];
-		return;
+		itr = End() - 1;
+		itr.Get()->next = nullptr;
 	}
-	// addPlace == 0‚Ì‚Æ‚«
-	list[size - 1].prev = nullptr;
-	list[size - 1].next = &list[0];
-	list[0].prev = &list[size - 1];
+	// Å‰‚ğíœ
+	if (delPlace == 0)
+	{
+
+	}
 }
 
 /* •]‰¿‰Û‘è‚Ì‘—¿
