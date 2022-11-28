@@ -84,7 +84,7 @@ template<class T> void Insert(List<T>& list)
 	scanf_s("%zd", &index);
 	printf("\n");
 	printf("追加する要素の値を入力してください\n");
-	char str[16]{};
+	char* str = new char;
 	scanf_s("%s", str, 16);
 	printf("\n");
 	list.Add(str, index);
@@ -102,7 +102,7 @@ template<class T> void Edit(List<T>& list)
 	printf("\n");
 	if (index < list.Size())
 	{
-		char str[16]{};
+		char* str = new char;
 		printf("%zd番目の要素の変更する値を入力してください\n", index);
 		scanf_s("%s", str, 16);
 		printf("\n");
@@ -119,11 +119,11 @@ template<class T> void Erase(List<T>& list)
 	size_t index = 0;
 	printf("[要素の削除]\n");
 	printf("削除したい要素の番号を指定してください\n");
-	scanf_s("%zd", &index); 
+	scanf_s("%zd", &index);
 	printf("\n");
 	if (index < list.Size())
 	{
-		printf("%zd番目の要素%sを削除しました\n", index,list[index]->source);
+		printf("%zd番目の要素%sを削除しました\n", index, list[index]->source);
 		list.Delete(index);
 		return;
 	}
