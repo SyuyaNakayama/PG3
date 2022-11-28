@@ -34,9 +34,97 @@ int main()
 		scanf_s("%d", &operateNum);
 		printf("\n");
 		if (operateNum == 9) { printf("要素操作を終了します\n"); break; }
-		FuncTable<const char*>[operateNum - 1](list);
+		size_t index = 0;
+		if (operateNum == 1)
+		{
+			while (true)
+			{
+				int select = 0;
+				printf("[要素の表示]\n");
+				printf("1.要素の一覧表示\n");
+				printf("9.要素操作に戻る\n");
+				printf("\n操作を選択してください\n");
+				scanf_s("%d", &select);
+				printf("\n");
+				size_t i = 0;
+				switch (select)
+				{
+				case 1:
+					printf("[要素の一覧表示]\n");
+					printf("要素数:%zd\n", list.Size());
+					printf("要素一覧:{\n");
+					for (List<const char*>::Iterator itr = list.Begin(); !list.IsEnd(itr); itr++)
+					{
+						printf("  %zd:%s\n", i++, *itr);
+					}
+					printf("}\n\n-----------------------\n");
+					printf("1.要素の表示に戻る\n");
+					printf("2.要素の操作に戻る\n");
+					scanf_s("%d", &select);
+					printf("\n");
+					if (select == 2) { continue; }
+					assert(select == 1);
+					break;
+				default:	assert(0);
+				case 9:		continue;
+				}
+			}
+			continue;
+		}
+		if (operateNum == 2)
+		{
+			printf("[要素の挿入]\n");
+			printf("要素を追加する場所を指定してください。最後尾に追加する場合は-1を入力してください。\n");
+			scanf_s("%zd", &index);
+			printf("\n");
+			printf("追加する要素の値を入力してください\n");
+			char* str = new char;
+			scanf_s("%s", str, 16);
+			printf("\n");
+			list.Add(str, index);
+			if (index == -1) { index = list.Size() - 1; }
+			printf("要素%sが%zd番目に挿入されました\n", str, index);
+			continue;
+		}
+		if (operateNum == 3)
+		{
+			if (list.Size() == 0) { continue; }
+			printf("[要素の編集]\n");
+			printf("編集したい要素の番号を指定してください\n");
+			scanf_s("%zd", &index);
+			printf("\n");
+			if (index < list.Size())
+			{
+				printf("%zd番目の要素の変更する値を入力してください\n", index);
+				char* str = new char;
+				scanf_s("%s", str, 16);
+				printf("\n");
+				*list[index] = (const char*)str;
+				printf("%zd番目の要素の値が%sに変更されました\n", index, str);
+				continue;
+			}
+			printf("%zd番目の要素が見つかりませんでした\n", index);
+			continue;
+		}
+		if (operateNum == 4)
+		{
+			if (list.Size() == 0) { continue; }
+			printf("[要素の削除]\n");
+			printf("削除したい要素の番号を指定してください\n");
+			scanf_s("%zd", &index);
+			printf("\n");
+			if (index < list.Size())
+			{
+				printf("%zd番目の要素%sを削除しました\n", index, list[index]->source);
+				list.Delete(index);
+				continue;
+			}
+			printf("%zd番目の要素が見つかりませんでした\n", index);
+			continue;
+		}
+		if (operateNum == 9) { printf("要素操作を終了します\n"); break; }
+		assert(0); break;
 	}
-
 	return 0;
 }
 
@@ -119,11 +207,11 @@ template<class T> void Erase(List<T>& list)
 	size_t index = 0;
 	printf("[要素の削除]\n");
 	printf("削除したい要素の番号を指定してください\n");
-	scanf_s("%zd", &index); 
+	scanf_s("%zd", &index);
 	printf("\n");
 	if (index < list.Size())
 	{
-		printf("%zd番目の要素%sを削除しました\n", index,list[index]->source);
+		printf("%zd番目の要素%sを削除しました\n", index, list[index]->source);
 		list.Delete(index);
 		return;
 	}
