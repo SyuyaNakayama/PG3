@@ -1,5 +1,4 @@
 #pragma once
-#include <stdlib.h>
 
 template<class T> class List
 {
@@ -23,8 +22,8 @@ public:
 	public:
 		ListStruct* Get() { return itr; }
 		void Set(ListStruct* lststr) { itr = lststr; }
-		void operator++(T) { itr = itr->next; }
-		void operator--(T) { itr = itr->prev; }
+		void operator++(int) { itr = itr->next; }
+		void operator--(int) { itr = itr->prev; }
 		Iterator& operator+(size_t incrementDis)
 		{
 			for (size_t i = 0; i < incrementDis; i++)
@@ -63,13 +62,14 @@ public:
 	}
 	void Add(T source, size_t addPlace = -1);
 	void Delete(size_t delPlace = -1);
-	T operator[](size_t index)
+	ListStruct* operator[](size_t index)
 	{
 		Iterator itr = Begin();
 		itr + index;
-		return *itr;
+		return itr.Get();
 	}
 	bool IsEnd(Iterator itr) { return itr.Get() == end; }
+	size_t Size() { return size; }
 };
 
 template<class T> void List<T>::Create(const size_t ARRAY_NUM)
