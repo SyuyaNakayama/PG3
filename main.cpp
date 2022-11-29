@@ -12,7 +12,7 @@ void (*FuncTable[4])(List<T>& list) = { Print<T>,Insert<T>,Edit<T>,Erase<T> };
 
 int main()
 {
-	List<const char*> list(3);
+	List<const char*> list;
 	list.Add("banana");
 	list.Add("apple");
 	list.Add("orange");
@@ -56,13 +56,13 @@ template<class T> void Print(List<T>& list)
 		{
 		case 1:
 			printf("[—v‘f‚Ìˆê——•\¦]\n");
-			printf("—v‘f”:%zd\n", list.Size());
 			printf("—v‘fˆê——:{\n");
 			for (List<const char*>::Iterator itr = list.Begin(); !list.IsEnd(itr); itr++)
 			{
 				printf("  %zd:%s\n", i++, *itr);
 			}
-			printf("}\n\n-----------------------\n");
+			printf("}\n\n—v‘f”:%zd\n\n", list.Size());
+			printf("-----------------------\n");
 			printf("1.—v‘f‚Ì•\¦‚É–ß‚é\n");
 			printf("2.—v‘f‚Ì‘€ì‚É–ß‚é\n");
 			scanf_s("%d", &select);
