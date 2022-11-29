@@ -106,7 +106,7 @@ template<class T> void Edit(List<T>& list)
 		printf("%zd番目の要素の変更する値を入力してください\n", index);
 		scanf_s("%s", str, 16);
 		printf("\n");
-		*list[index] = (const char*)str;
+		*list[index] = str;
 		printf("%zd番目の要素の値が%sに変更されました\n", index, str);
 		return;
 	}
