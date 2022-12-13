@@ -1,40 +1,33 @@
 #include <stdio.h>
-#include <array>
 
 class Enemy
 {
 private:
-	static bool isExist_;
+	size_t statePattern_ = 0;
+	void Approach() { printf("Œ»İ‚Ìs“®:‹ßÚ\n"); }
+	void Shoot() { printf("Œ»İ‚Ìs“®:ËŒ‚\n"); }
+	void Leave() { printf("Œ»İ‚Ìs“®:—£’E\n"); }
+	static void (Enemy::* ActionTable[])();
 
 public:
-	void SetIsExist(bool isExist) { isExist_ = isExist; }
-	void PrintState()
+
+	void Action()
 	{
-		if (isExist_) { printf("¶‘¶\n"); }
-		else { printf("Á–Å\n"); }
+		(this->*ActionTable[statePattern_++])();
 	}
 };
 
-bool Enemy::isExist_ = true;
+void (Enemy::* Enemy::ActionTable[])() =
+{
+	&Enemy::Approach,&Enemy::Shoot,&Enemy::Leave
+};
 
 int main()
 {
-	std::array<Enemy, 6> enemies{};
-	// “Gó‘Ô‚ğ•\¦
-	for (int i = 0; i < enemies.size(); i++)
-	{
-		printf("“G%d‚Ìó‘Ô:", i);
-		enemies[i].PrintState();
-	}
-	// enemies[3]‚ğ“|‚µ‚½
-	enemies[3].SetIsExist(false);
-	printf("“G3‚ğ“|‚µ‚½II\n");
-	// “Gó‘Ô‚ğÄ•\¦
-	for (int i = 0; i < enemies.size(); i++)
-	{
-		printf("“G%d‚Ìó‘Ô:", i);
-		enemies[i].PrintState();
-	}
+	Enemy enemy;
+	enemy.Action(); // ‹ßÚ‚Ìs“®
+	enemy.Action(); // ËŒ‚‚Ìs“®
+	enemy.Action(); // —£’E‚Ìs“®
 
 	return 0;
 }
