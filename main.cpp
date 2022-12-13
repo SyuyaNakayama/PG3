@@ -1,33 +1,39 @@
 #include <stdio.h>
 
-class Enemy
+class IShape
 {
-private:
-	size_t statePattern_ = 0;
-	void Approach() { printf("現在の行動:近接\n"); }
-	void Shoot() { printf("現在の行動:射撃\n"); }
-	void Leave() { printf("現在の行動:離脱\n"); }
-	static void (Enemy::* ActionTable[])();
-
 public:
-
-	void Action()
-	{
-		(this->*ActionTable[statePattern_++])();
-	}
+	virtual float size() = 0;
+	virtual void draw() = 0;
 };
 
-void (Enemy::* Enemy::ActionTable[])() =
+class Circle : public IShape
 {
-	&Enemy::Approach,&Enemy::Shoot,&Enemy::Leave
+private:
+	float r = 16.0f;
+
+public:
+	float size() { return r * r * 3.141592f; }
+	void draw() { printf("CircleSize:%f\n", size()); }
+};
+
+class Rectangle :public IShape
+{
+private:
+	float rX = 10.0f;
+	float rY = 15.0f;
+
+public:
+	float size() { return rX * rY; }
+	void draw() { printf("RectangleSize:%f\n", size()); }
 };
 
 int main()
 {
-	Enemy enemy;
-	enemy.Action(); // 近接の行動
-	enemy.Action(); // 射撃の行動
-	enemy.Action(); // 離脱の行動
+	Circle circle;
+	Rectangle rectangle;
+	circle.draw();
+	rectangle.draw();
 
 	return 0;
 }
